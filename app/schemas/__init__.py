@@ -1,4 +1,5 @@
 from app.schemas.auth import LoginRequest, SignupRequest, TokenResponse, UserResponse
+from app.schemas.booking import BookingCreate, BookingResponse
 from app.schemas.centre import CentreCreate, CentreResponse
 from app.schemas.diagnostic_test import DiagnosticTestCreate, DiagnosticTestResponse
 
@@ -11,4 +12,7 @@ __all__ = [
     "CentreResponse",
     "DiagnosticTestCreate",
     "DiagnosticTestResponse",
+    "BookingCreate",
+    "BookingResponse",
 ]
+

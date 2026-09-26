@@ -2,8 +2,9 @@
 
 A backend service for diagnostic test bookings and simulated payments built with Python, FastAPI, and PostgreSQL.
 
-> **Current Implementation Status:** Phase 4 Complete (Diagnostic Centres & Tests Catalog).  
-> Bookings, payments, and webhook flows are outlined in [`PLAN.md`](./PLAN.md) and will be implemented in subsequent phases.
+> **Current Implementation Status:** Phase 5 Complete (Booking & Booking State Machine).  
+> Simulated payments and webhook idempotency are outlined in [`PLAN.md`](./PLAN.md) and will be implemented in Phase 6.
+
 
 ---
 
@@ -120,9 +121,14 @@ Once started:
 | `POST` | `/centres/` | Create a new diagnostic centre | Bearer JWT |
 | `GET` | `/centres/{id}/tests` | List tests offered by a centre | No |
 | `POST` | `/centres/{id}/tests` | Add diagnostic test with centre-specific pricing | Bearer JWT |
+| `POST` | `/bookings/` | Book diagnostic test (historical price snapshot) | Bearer JWT |
+| `GET` | `/bookings/` | List authenticated user's bookings | Bearer JWT |
+| `GET` | `/bookings/{id}` | Get single booking details (ownership scoped) | Bearer JWT |
+| `PATCH`| `/bookings/{id}/cancel` | Cancel a pending booking (ownership scoped) | Bearer JWT |
 | `GET` | `/docs` | Interactive Swagger / OpenAPI documentation | No |
 
 ### Example cURL Requests
+
 
 #### 1. User Signup
 ```bash
@@ -174,7 +180,26 @@ curl -X POST "http://127.0.0.1:8000/centres/<CENTRE_ID>/tests" \
   }'
 ```
 
+#### 6. Create Diagnostic Test Booking (Authenticated)
+```bash
+curl -X POST "http://127.0.0.1:8000/bookings/" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+  -d '{
+    "centre_id": "<CENTRE_ID>",
+    "test_id": "<TEST_ID>",
+    "appointment_datetime": "2026-10-15T10:30:00Z"
+  }'
+```
+
+#### 7. List User's Bookings (Authenticated)
+```bash
+curl -X GET "http://127.0.0.1:8000/bookings/" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+```
+
 ---
+
 
 ## Running Tests
 

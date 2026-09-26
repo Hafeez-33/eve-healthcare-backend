@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from app.api.v1.auth import router as auth_router
+from app.api.v1.bookings import router as bookings_router
 from app.api.v1.centres import router as centres_router
 from app.core.config import settings
 
@@ -12,6 +13,8 @@ app = FastAPI(
 
 app.include_router(auth_router)
 app.include_router(centres_router)
+app.include_router(bookings_router)
+
 
 
 @app.get("/", tags=["General"])
