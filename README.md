@@ -2,8 +2,9 @@
 
 A backend service for diagnostic test bookings and simulated payments built with Python, FastAPI, and PostgreSQL.
 
-> **Current Implementation Status:** Phase 5 Complete (Booking & Booking State Machine).  
-> Simulated payments and webhook idempotency are outlined in [`PLAN.md`](./PLAN.md) and will be implemented in Phase 6.
+> **Current Implementation Status:** Phase 6 Complete (Payments & Webhook Idempotency Engine).  
+> All core assessment features (Auth, Centres & Tests, Bookings, State Machine, Payments, and Webhooks) are fully implemented and verified against PostgreSQL.
+
 
 
 ---
@@ -125,7 +126,10 @@ Once started:
 | `GET` | `/bookings/` | List authenticated user's bookings | Bearer JWT |
 | `GET` | `/bookings/{id}` | Get single booking details (ownership scoped) | Bearer JWT |
 | `PATCH`| `/bookings/{id}/cancel` | Cancel a pending booking (ownership scoped) | Bearer JWT |
+| `POST` | `/payments/` | Simulate payment for pending booking (atomic row lock) | Bearer JWT |
+| `POST` | `/payments/webhook/` | Process provider webhook (atomic ON CONFLICT idempotency) | Public |
 | `GET` | `/docs` | Interactive Swagger / OpenAPI documentation | No |
+
 
 ### Example cURL Requests
 
@@ -198,7 +202,36 @@ curl -X GET "http://127.0.0.1:8000/bookings/" \
   -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
 ```
 
+#### 8. Simulate Payment for Booking (Authenticated)
+```bash
+curl -X POST "http://127.0.0.1:8000/payments/" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+  -d '{
+    "booking_id": "<BOOKING_ID>",
+    "simulate_status": "SUCCESS"
+  }'
+```
+
+#### 9. Simulate Payment Gateway Webhook (Provider Callback)
+```bash
+curl -X POST "http://127.0.0.1:8000/payments/webhook/" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event_id": "evt_live_1234567890abcdef",
+    "event_type": "payment.updated",
+    "timestamp": "2026-09-26T10:07:00Z",
+    "data": {
+      "transaction_reference": "TXN_PG_987654321",
+      "booking_id": "<BOOKING_ID>",
+      "amount": "450.00",
+      "status": "SUCCESS"
+    }
+  }'
+```
+
 ---
+
 
 
 ## Running Tests

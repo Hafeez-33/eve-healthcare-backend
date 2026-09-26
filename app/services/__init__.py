@@ -11,6 +11,10 @@ from app.services.diagnostic_test_service import (
     create_diagnostic_test,
     list_tests_by_centre,
 )
+from app.services.payment_service import (
+    create_simulated_payment,
+    process_webhook,
+)
 
 __all__ = [
     "register_user",
@@ -25,5 +29,8 @@ __all__ = [
     "get_user_booking",
     "transition_booking_status",
     "cancel_user_booking",
+    "create_simulated_payment",
+    "process_webhook",
 ]
+
 
