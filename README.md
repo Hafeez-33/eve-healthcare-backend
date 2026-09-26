@@ -2,7 +2,7 @@
 
 A backend service for diagnostic test bookings and simulated payments built with Python, FastAPI, and PostgreSQL.
 
-> **Current Implementation Status:** Phase 2 Complete (Database Models & Alembic Migrations).  
+> **Current Implementation Status:** Phase 3 Complete (Authentication & Security Engine).  
 > Diagnostic centres, bookings, payments, and webhook flows are outlined in [`PLAN.md`](./PLAN.md) and will be implemented in subsequent phases.
 
 ---
@@ -14,6 +14,7 @@ A backend service for diagnostic test bookings and simulated payments built with
 - **Database:** PostgreSQL 16
 - **ORM:** SQLAlchemy 2.0
 - **Database Migrations:** Alembic
+- **Security & Auth:** PyJWT, bcrypt
 - **Configuration & Validation:** Pydantic v2 / pydantic-settings
 - **Testing:** Pytest & HTTPX
 - **Server:** Uvicorn
@@ -112,7 +113,32 @@ Once started:
 |---|---|---|:---:|
 | `GET` | `/` | Application root status message | No |
 | `GET` | `/health` | Health check endpoint | No |
+| `POST` | `/auth/signup` | User signup with bcrypt password hashing | No |
+| `POST` | `/auth/login` | User login and signed JWT access token issuance | No |
 | `GET` | `/docs` | Interactive Swagger / OpenAPI documentation | No |
+
+### Example cURL Requests
+
+#### 1. User Signup
+```bash
+curl -X POST "http://127.0.0.1:8000/auth/signup" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "jane.doe@example.com",
+    "password": "SecurePassword123!",
+    "full_name": "Jane Doe"
+  }'
+```
+
+#### 2. User Login
+```bash
+curl -X POST "http://127.0.0.1:8000/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "jane.doe@example.com",
+    "password": "SecurePassword123!"
+  }'
+```
 
 ---
 
