@@ -2,7 +2,7 @@
 
 A backend service for diagnostic test bookings and simulated payments built with Python, FastAPI, and PostgreSQL.
 
-> **Current Implementation Status:** Phase 1 Complete (Project Foundation & Configuration).  
+> **Current Implementation Status:** Phase 2 Complete (Database Models & Alembic Migrations).  
 > Diagnostic centres, bookings, payments, and webhook flows are outlined in [`PLAN.md`](./PLAN.md) and will be implemented in subsequent phases.
 
 ---
@@ -67,6 +67,27 @@ ACCESS_TOKEN_EXPIRE_MINUTES=60
 WEBHOOK_SECRET=optional-webhook-secret
 PROJECT_NAME="EVE Healthcare API"
 DEBUG=True
+```
+
+---
+
+## Database Migrations & Seeding
+
+### 1. Apply Alembic Migrations
+Apply all schema migrations to create the six core tables:
+```bash
+alembic upgrade head
+```
+
+Verify current migration head:
+```bash
+alembic current
+```
+
+### 2. Seed Initial Centres & Tests (Optional / Development)
+Populate realistic diagnostic centres and diagnostic tests:
+```bash
+python -m app.scripts.seed
 ```
 
 ---
