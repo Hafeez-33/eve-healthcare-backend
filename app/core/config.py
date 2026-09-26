@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/eve_healthcare"
 
     # Security & JWT Configuration
-    SECRET_KEY: str = "change-this-to-a-secure-random-secret-key-in-production-min-32-chars"
+    SECRET_KEY: str
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 

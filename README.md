@@ -32,7 +32,7 @@ Production-ready backend service for diagnostic centre discovery, appointment bo
 The **EVE Healthcare Backend API** provides a diagnostic appointment management and payment processing platform. Key capabilities include:
 
 - **User Authentication**: Secure user registration, password hashing with `bcrypt`, and stateless JWT access token authentication.
-- **Diagnostic Centres & Tests Catalogue**: Browsing diagnostic centres, centre-specific test listings, and administrative test additions.
+- **Diagnostic Centres & Tests Catalogue**: Browsing diagnostic centres, centre-specific test listings, and adding diagnostic tests to centres as an authenticated user.
 - **Booking Management**: Appointment booking with historical price snapshotting to guarantee immutable billing values even if catalogue prices change later.
 - **Strict Booking State Machine**: Controlled transitions (`PENDING` -> `CONFIRMED`, `FAILED`, or `CANCELLED`) with rigid enforcement against illegal transitions from terminal states.
 - **Simulated Payment Gateway**: Direct payment simulation and external webhook processing.
