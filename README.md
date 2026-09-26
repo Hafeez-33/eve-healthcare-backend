@@ -2,8 +2,8 @@
 
 A backend service for diagnostic test bookings and simulated payments built with Python, FastAPI, and PostgreSQL.
 
-> **Current Implementation Status:** Phase 3 Complete (Authentication & Security Engine).  
-> Diagnostic centres, bookings, payments, and webhook flows are outlined in [`PLAN.md`](./PLAN.md) and will be implemented in subsequent phases.
+> **Current Implementation Status:** Phase 4 Complete (Diagnostic Centres & Tests Catalog).  
+> Bookings, payments, and webhook flows are outlined in [`PLAN.md`](./PLAN.md) and will be implemented in subsequent phases.
 
 ---
 
@@ -115,6 +115,11 @@ Once started:
 | `GET` | `/health` | Health check endpoint | No |
 | `POST` | `/auth/signup` | User signup with bcrypt password hashing | No |
 | `POST` | `/auth/login` | User login and signed JWT access token issuance | No |
+| `GET` | `/centres/` | List diagnostic centres and offered tests | No |
+| `GET` | `/centres/{id}` | Get single diagnostic centre details | No |
+| `POST` | `/centres/` | Create a new diagnostic centre | Bearer JWT |
+| `GET` | `/centres/{id}/tests` | List tests offered by a centre | No |
+| `POST` | `/centres/{id}/tests` | Add diagnostic test with centre-specific pricing | Bearer JWT |
 | `GET` | `/docs` | Interactive Swagger / OpenAPI documentation | No |
 
 ### Example cURL Requests
@@ -137,6 +142,35 @@ curl -X POST "http://127.0.0.1:8000/auth/login" \
   -d '{
     "email": "jane.doe@example.com",
     "password": "SecurePassword123!"
+  }'
+```
+
+#### 3. List Centres
+```bash
+curl -X GET "http://127.0.0.1:8000/centres/"
+```
+
+#### 4. Create Diagnostic Centre (Authenticated)
+```bash
+curl -X POST "http://127.0.0.1:8000/centres/" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+  -d '{
+    "name": "Apollo Clinic",
+    "location": "Koramangala, Bangalore",
+    "contact_number": "+918025531234"
+  }'
+```
+
+#### 5. Add Test to Centre (Authenticated)
+```bash
+curl -X POST "http://127.0.0.1:8000/centres/<CENTRE_ID>/tests" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+  -d '{
+    "name": "Complete Blood Count (CBC)",
+    "description": "Measures red/white blood cells and platelets",
+    "price": "450.00"
   }'
 ```
 

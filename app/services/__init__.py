@@ -1,6 +1,16 @@
 from app.services.auth_service import authenticate_user, register_user
+from app.services.centre_service import create_centre, get_centre_by_id, list_centres
+from app.services.diagnostic_test_service import (
+    create_diagnostic_test,
+    list_tests_by_centre,
+)
 
 __all__ = [
     "register_user",
     "authenticate_user",
+    "list_centres",
+    "get_centre_by_id",
+    "create_centre",
+    "list_tests_by_centre",
+    "create_diagnostic_test",
 ]
