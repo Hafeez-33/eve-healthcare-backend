@@ -421,6 +421,34 @@ def test_cancel_confirmed_booking_returns_409(user_a, catalogue):
     assert "Cannot transition booking from CONFIRMED to CANCELLED" in cancel_res.json()["detail"]
 
 
+def test_cancel_failed_booking_returns_409(user_a, catalogue):
+    _, headers = user_a
+
+    # Create booking
+    res = client.post(
+        "/bookings/",
+        json={
+            "centre_id": catalogue["centre_id"],
+            "test_id": catalogue["test_id"],
+            "appointment_datetime": get_future_datetime(),
+        },
+        headers=headers,
+    )
+    booking_id = res.json()["id"]
+
+    # Move booking to FAILED directly
+    with SessionLocal() as db:
+        booking = db.get(Booking, uuid.UUID(booking_id))
+        booking.status = BookingStatus.FAILED
+        db.commit()
+
+    # Attempt to cancel FAILED booking
+    cancel_res = client.patch(f"/bookings/{booking_id}/cancel", headers=headers)
+    assert cancel_res.status_code == 409
+    assert "Cannot transition booking from FAILED to CANCELLED" in cancel_res.json()["detail"]
+
+
+
 def test_service_level_state_transitions(catalogue, user_a):
     user_id, _ = user_a
 
